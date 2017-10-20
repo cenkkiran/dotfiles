@@ -38,9 +38,6 @@ brew 'mariadb'
 
 
 # Apps
-cask 'alfred'
-cask 'caffeine'
-cask 'docker'
 cask 'opera'
 cask 'google-backup-and-sync'
 cask 'google-chrome'
@@ -59,7 +56,3 @@ cask 'font-sauce-code-powerline'
 cask 'font-source-code-pro'
 cask 'font-source-sans-pro'
 cask 'font-source-serif-pro'
-
-# Install Mac App Store apps
-mas 'Sketch', id: 402476602
-mas 'Tweetbot', id: 557168941
