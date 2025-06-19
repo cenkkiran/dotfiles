@@ -5,9 +5,9 @@ Automated setup for macOS development environment. This repository contains scri
 ## 📋 What Gets Installed
 
 ### Development Tools
-- **Code Editors**: VS Code, Cursor, Sublime Text, Android Studio, DataGrip
-- **Terminals**: iTerm2, Warp, Ghostty
-- **Languages**: Python 3.12, Node.js (LTS), Go, Rust
+- **Code Editors**: VS Code, Cursor, Sublime Text
+- **Terminals**: iTerm2
+- **Languages**: Python 3.12, Node.js (LTS)
 - **Tools**: Docker, Git, Homebrew, various CLI utilities
 
 ### Productivity Apps
@@ -18,10 +18,10 @@ Automated setup for macOS development environment. This repository contains scri
 
 ### System Configurations
 - Zsh with Oh My Zsh + plugins
-- Starship prompt
-- Git configuration
-- macOS system preferences
-- Application settings
+- Starship prompt (customizable)
+- Git configuration (with Cursor integration)
+- macOS system preferences (based on current settings)
+- Application settings for both VS Code and Cursor
 
 ## 🚀 Quick Start
 
@@ -55,8 +55,8 @@ Automated setup for macOS development environment. This repository contains scri
 ├── requirements.txt        # Python packages
 ├── README.md               # This file
 ├── config/                 # Configuration files
-│   ├── .zshrc             # Zsh configuration
-│   ├── .gitconfig         # Git configuration
+│   ├── .zshrc             # Zsh configuration (Starship prompt)
+│   ├── .gitconfig         # Git configuration (Cursor integration)
 │   └── starship.toml      # Starship prompt config
 ├── scripts/               # Individual installation scripts
 │   ├── homebrew.sh        # Homebrew packages
@@ -66,8 +66,10 @@ Automated setup for macOS development environment. This repository contains scri
 │   ├── defaults.sh        # macOS preferences
 │   └── symlinks.sh        # Create symbolic links
 └── apps/                  # Application-specific configs
-    └── vscode/            # VS Code settings and extensions
-        ├── settings.json
+    ├── vscode/            # VS Code settings and extensions
+    │   ├── settings.json
+    │   └── extensions.txt
+    └── cursor/            # Cursor settings and extensions
         └── extensions.txt
 ```
 
@@ -97,6 +99,32 @@ Automated setup for macOS development environment. This repository contains scri
 - **Python packages**: Add to `requirements.txt`
 - **Homebrew packages**: Add to `Brewfile`
 - **VS Code extensions**: Add to `apps/vscode/extensions.txt`
+- **Cursor extensions**: Add to `apps/cursor/extensions.txt`
+
+## 🎯 Key Features
+
+### Smart macOS Defaults
+The `defaults.sh` script is intelligently designed to:
+- Apply your current system preferences as the primary settings
+- Include commented alternatives for developer-friendly options
+- Highlight conflicts with clear `# CONFLICT:` markers
+- Allow easy customization by uncommenting preferred alternatives
+
+### Dual Editor Support
+- **VS Code**: Traditional development setup with themes and productivity extensions
+- **Cursor**: AI-enhanced development with specialized extensions for analytics and data work
+
+### Git Integration
+- Pre-configured with Cursor as the default diff and merge tool
+- Comprehensive aliases for efficient git workflow
+- Color-coded output for better readability
+
+### Analytics-Focused Extensions
+Special focus on data and analytics development:
+- **dbt Power User** for data transformation
+- **BigQuery, PostgreSQL, MySQL** drivers
+- **Data Wrangler** for data analysis
+- **Jupyter** support with full extension suite
 
 ## 📝 Manual Steps After Installation
 
@@ -118,6 +146,11 @@ Some applications require manual configuration:
    - AWS credentials
    - Database connections
 
+4. **Configure Cursor**:
+   - Sign in to Cursor account
+   - Import settings if migrating from VS Code
+   - Set up AI features and preferences
+
 ## 🔄 Keeping Dotfiles Updated
 
 ### Export Current Settings
@@ -132,7 +165,12 @@ Some applications require manual configuration:
    code --list-extensions > ~/.dotfiles/apps/vscode/extensions.txt
    ```
 
-3. **Python packages**:
+3. **Cursor extensions**:
+   ```bash
+   cursor --list-extensions > ~/.dotfiles/apps/cursor/extensions.txt
+   ```
+
+4. **Python packages**:
    ```bash
    pip freeze > ~/.dotfiles/requirements.txt
    ```
@@ -160,6 +198,10 @@ The installation script automatically backs up existing configurations to:
    - The script will ask for sudo password when needed
    - Make sure you have admin privileges
 
+4. **Cursor configuration**:
+   - Make sure Cursor is installed via Homebrew first
+   - Extensions will be installed during the main installation process
+
 ### Manual Installation
 
 If the automated script fails, you can run individual components:
@@ -178,12 +220,30 @@ If the automated script fails, you can run individual components:
 ./scripts/defaults.sh
 ```
 
+### macOS Defaults Customization
+
+The `defaults.sh` script includes intelligent conflict resolution:
+- Your current settings are always applied by default
+- Alternative options are commented with explanations
+- Look for `# CONFLICT:` markers to identify customization points
+- Uncomment preferred alternatives before running the script
+
 ## 📱 Applications Not in Homebrew
 
 Some applications need to be installed manually:
 
 - **Ghostty**: Download from official website
 - **Grammarly Desktop**: Download from official website
+
+## 🔍 What's New
+
+### Recent Updates
+- ✅ Added Cursor extensions configuration
+- ✅ Updated Git configuration for Cursor integration
+- ✅ Enhanced defaults script with conflict-aware settings
+- ✅ Improved repository structure documentation
+- ✅ Added analytics-focused extension support
+- ✅ Enhanced Starship prompt configuration
 
 ## 🤝 Contributing
 
