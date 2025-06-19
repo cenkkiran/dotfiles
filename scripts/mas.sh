@@ -41,14 +41,5 @@ print_status "Installing applications..."
 # Install apps (you may need to adjust IDs based on your region)
 mas install 441258766   # Magnet
 mas install 937984704   # Amphetamine  
-mas install 462058435   # Microsoft Excel
-mas install 462054704   # Microsoft Word
-mas install 462062816   # Microsoft PowerPoint
-mas install 784801555   # Microsoft OneNote
-mas install 409201541   # Pages
-mas install 409203825   # Numbers
-mas install 409183694   # Keynote
-mas install 682658836   # GarageBand
-mas install 408981434   # iMovie
 
 print_success "Mac App Store applications installed!"

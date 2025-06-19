@@ -183,10 +183,7 @@ If the automated script fails, you can run individual components:
 Some applications need to be installed manually:
 
 - **Ghostty**: Download from official website
-- **Windsurf**: Download from official website  
-- **Superhuman**: Download from official website
 - **Grammarly Desktop**: Download from official website
-- **Some enterprise/security tools**: Follow your organization's instructions
 
 ## 🤝 Contributing
 

@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# macOS Defaults Script
+# macOS Defaults Script - Based on Your Current System Settings
+# This script replicates your current macOS preferences with alternative options commented
 
 set -e
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 print_status() {
@@ -16,7 +18,11 @@ print_success() {
     echo -e "${GREEN}[DEFAULTS]${NC} $1"
 }
 
-print_status "Setting macOS preferences..."
+print_warning() {
+    echo -e "${YELLOW}[DEFAULTS]${NC} $1"
+}
+
+print_status "Setting macOS preferences based on your current configuration..."
 
 # Close any open System Preferences panes
 osascript -e 'tell application "System Preferences" to quit'
@@ -25,26 +31,78 @@ osascript -e 'tell application "System Preferences" to quit'
 sudo -v
 
 ###############################################################################
+# System-wide Preferences (from your NSGlobalDomain)                         #
+###############################################################################
+
+print_status "Setting system-wide preferences..."
+
+# Dark mode (you currently use Dark mode)
+defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+
+# Language and region settings (en-GB primary, tr-GB secondary)
+defaults write NSGlobalDomain AppleLanguages -array "en-GB" "tr-GB"
+defaults write NSGlobalDomain AppleLocale -string "en_GB"
+
+# Measurement units (Centimeters and Celsius)
+defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+defaults write NSGlobalDomain AppleMetricUnits -bool true
+defaults write NSGlobalDomain AppleTemperatureUnit -string "Celsius"
+
+# Text editing preferences (matching your current settings)
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true
+defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool true
+defaults write NSGlobalDomain NSAllowContinuousSpellChecking -bool false
+
+# Spring loading settings (you have these enabled)
+defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+defaults write NSGlobalDomain com.apple.springing.delay -float 0
+
+# Trackpad settings (force click enabled)
+defaults write NSGlobalDomain com.apple.trackpad.forceClick -bool true
+
+# Trackpad: enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Trackpad: map bottom right corner to right-click
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+
+# Sound settings (no flash on beep)
+defaults write com.apple.sound.beep.flash -int 0
+sudo nvram SystemAudioVolume=" "
+
+# Enable full keyboard access for all controls
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# Key repeat settings - fast for developers
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# Use scroll gesture with the Ctrl (^) modifier key to zoom
+defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
+
+###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
 
-# Set computer name (as done via System Preferences → Sharing)
-# sudo scutil --set ComputerName "YourMacBookPro"
-# sudo scutil --set HostName "YourMacBookPro"
-# sudo scutil --set LocalHostName "YourMacBookPro"
-# sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "YourMacBookPro"
-
-# Disable the sound effects on boot
-sudo nvram SystemAudioVolume=" "
+print_status "Setting general UI/UX preferences..."
 
 # Menu bar: show battery percentage
 defaults write com.apple.menuextra.battery ShowPercent YES
 
-# Expand save panel by default
+# Expand save and print panels by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-
-# Expand print panel by default
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
@@ -61,153 +119,122 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 ###############################################################################
-# Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
+# Dock preferences (based on your current dock settings)                     #
 ###############################################################################
 
-# Trackpad: enable tap to click for this user and for the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+print_status "Setting Dock preferences..."
 
-# Trackpad: map bottom right corner to right-click
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+# CONFLICT: Dock tile size
+# Your current setting: 52 pixels (medium size)
+defaults write com.apple.dock tilesize -int 52
 
-# Enable full keyboard access for all controls
-defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+# Large size for magnification (you have largesize = 128)
+defaults write com.apple.dock largesize -int 128
 
-# Use scroll gesture with the Ctrl (^) modifier key to zoom
-defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+# CONFLICT: Dock auto-hide behavior
+# Your current setting: Always visible (autohide = false)
+defaults write com.apple.dock autohide -bool false
 
-# Follow the keyboard focus while zoomed in
-defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
+# Dock behavior settings (matching your current preferences)
+defaults write com.apple.dock "minimize-to-application" -bool true
+defaults write com.apple.dock "mru-spaces" -bool false
+defaults write com.apple.dock "expose-group-apps" -bool false
+
+# Additional dock improvements
+defaults write com.apple.dock mineffect -string "scale"
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+defaults write com.apple.dock show-process-indicators -bool true
+defaults write com.apple.dock launchanim -bool false
+defaults write com.apple.dock expose-animation-duration -float 0.1
+defaults write com.apple.dock showhidden -bool true
+
+# Hot corner (you have bottom-right corner set to 14)
+defaults write com.apple.dock wvous-br-corner -int 14
 
 ###############################################################################
-# Finder                                                                      #
+# Finder preferences (based on your current settings)                        #
 ###############################################################################
 
-# Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
-defaults write com.apple.finder QuitMenuItem -bool true
+print_status "Setting Finder preferences..."
 
-# Finder: disable window animations and Get Info animations
-defaults write com.apple.finder DisableAllAnimations -bool true
-
-# Set Desktop as the default location for new Finder windows
-defaults write com.apple.finder NewWindowTarget -string "PfDe"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
-
-# Show icons for hard drives, servers, and removable media on the desktop
+# CONFLICT: Desktop icon visibility
+# Your current settings: External drives yes, hard drives no
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 
-# Finder: show hidden files by default
-defaults write com.apple.finder AppleShowAllFiles -bool true
+# CONFLICT: Finder view preferences
+# Your current setting: Column view (clmv)
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+# Alternative: List view for more file details
+# defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Finder: show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# CONFLICT: New Finder window location
+# Your current setting: Not explicitly set (likely defaults to recent folders)
+# Alternative: Set Desktop as default location
+# defaults write com.apple.finder NewWindowTarget -string "PfDe"
+# defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
-# Finder: show status bar
-defaults write com.apple.finder ShowStatusBar -bool true
+# Sidebar settings (you have sidebar enabled)
+defaults write com.apple.finder ShowSidebar -bool true
 
-# Finder: show path bar
-defaults write com.apple.finder ShowPathbar -bool true
+# iCloud settings (you have iCloud Drive enabled for Desktop & Documents)
+defaults write com.apple.finder FXICloudDriveEnabled -bool true
+defaults write com.apple.finder FXICloudDriveDesktop -bool true
+defaults write com.apple.finder FXICloudDriveDocuments -bool true
 
-# Display full POSIX path as Finder window title
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-
-# Keep folders on top when sorting by name
-defaults write com.apple.finder _FXSortFoldersFirst -bool true
-
-# When performing a search, search the current folder by default
+# Search scope (you use current folder - SCcf)
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-# Disable the warning when changing a file extension
+# CONFLICT: Show hidden files
+# Your current setting: Not explicitly set (likely hidden)
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# CONFLICT: Additional Finder UI elements
+# Your current setting: Not explicitly set
+# Alternatives: Show status bar and path bar (useful for developers)
+# defaults write com.apple.finder ShowStatusBar -bool true
+# defaults write com.apple.finder ShowPathbar -bool true
+
+# CONFLICT: Finder window title
+# Alternative: Display full POSIX path as Finder window title
+# defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# CONFLICT: Finder quit option
+# Alternative: Allow quitting Finder via ⌘ + Q (also hides desktop icons)
+# defaults write com.apple.finder QuitMenuItem -bool true
+
+# Useful Finder settings (recommended)
+defaults write com.apple.finder DisableAllAnimations -bool true
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-# Enable spring loading for directories
-defaults write NSGlobalDomain com.apple.springing.enabled -bool true
-
-# Remove the spring loading delay for directories
-defaults write NSGlobalDomain com.apple.springing.delay -float 0
+defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # Avoid creating .DS_Store files on network or USB volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
-# Use list view in all Finder windows by default
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-# Disable the warning before emptying the Trash
-defaults write com.apple.finder WarnOnEmptyTrash -bool false
-
-###############################################################################
-# Dock, Dashboard, and hot corners                                           #
-###############################################################################
-
-# Set the icon size of Dock items to 36 pixels
-defaults write com.apple.dock tilesize -int 36
-
-# Change minimize/maximize window effect
-defaults write com.apple.dock mineffect -string "scale"
-
-# Minimize windows into their application's icon
-defaults write com.apple.dock minimize-to-application -bool true
-
-# Enable spring loading for all Dock items
-defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
-
-# Show indicator lights for open applications in the Dock
-defaults write com.apple.dock show-process-indicators -bool true
-
-# Don't animate opening applications from the Dock
-defaults write com.apple.dock launchanim -bool false
-
-# Speed up Mission Control animations
-defaults write com.apple.dock expose-animation-duration -float 0.1
-
-# Don't group windows by application in Mission Control
-defaults write com.apple.dock expose-group-by-app -bool false
-
-# Don't automatically rearrange Spaces based on most recent use
-defaults write com.apple.dock mru-spaces -bool false
-
-# Remove the auto-hiding Dock delay
-defaults write com.apple.dock autohide-delay -float 0
-
-# Remove the animation when hiding/showing the Dock
-defaults write com.apple.dock autohide-time-modifier -float 0
-
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
-
-# Make Dock icons of hidden applications translucent
-defaults write com.apple.dock showhidden -bool true
-
 ###############################################################################
 # Activity Monitor                                                           #
 ###############################################################################
 
-# Show the main window when launching Activity Monitor
+print_status "Setting Activity Monitor preferences..."
+
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
-
-# Visualize CPU usage in the Activity Monitor Dock icon
 defaults write com.apple.ActivityMonitor IconType -int 5
-
-# Show all processes in Activity Monitor
 defaults write com.apple.ActivityMonitor ShowCategory -int 0
-
-# Sort Activity Monitor results by CPU usage
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
+
+print_status "Restarting affected applications..."
 
 for app in "Activity Monitor" \
 	"Address Book" \
@@ -233,4 +260,6 @@ for app in "Activity Monitor" \
 	killall "${app}" &> /dev/null || true
 done
 
-print_success "macOS preferences set! Some changes require a logout/restart to take effect."
+print_success "macOS preferences have been set to match your current configuration!"
+print_warning "Some changes may require a logout/restart to take full effect."
+print_warning "Review the commented alternatives above and uncomment preferred options."
