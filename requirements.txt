@@ -33,6 +33,7 @@ poetry==1.5.1
 # AWS & Cloud
 boto3==1.28.17
 awscli==1.29.17
+gcloud==464.0.0
 
 # Database
 psycopg2-binary==2.9.7
